@@ -94,10 +94,10 @@ void GPIO_Configure(void)
 #endif
 
 	/* SIGNAL CTRL FPGA */
-	GPIO_Set(GPIO_TFB, MODE_TRG);
-	GPIO_Set(GPIO_TRG, MODE_TFB);
+	GPIO_Set(GPIO_TFB, MODE_TFB);
+	GPIO_Set(GPIO_TRG, MODE_TRG);
 
-	GPIO_ResetBits(GPIO_TFB);
+	GPIO_ResetBits(GPIO_TRG);
 }
 
 
@@ -134,9 +134,10 @@ void USART_Configure(void)
 	USART_InitStructure.USART_StopBits = USART_StopBits_2;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
 	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+	USART_InitStructure.USART_Mode = USART_Mode_Tx;
 	USART_Init ( USART3, &USART_InitStructure );
 	USART_Cmd ( USART3, ENABLE );
+//	USART_ITConfig ( USART3, USART_IT_RXNE, ENABLE ); 	// enable usart3 rx interrupt
 #endif
 }
 
@@ -196,37 +197,42 @@ void TIM_Configure(void)
 
 void EXTI_Configure( void )
 {
-	EXTI_InitTypeDef   EXTI_InitStructure;
+//	EXTI_InitTypeDef EXTI_InitStructure;
 
-	/* binding B11 to EXTI line */
-	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource11);
-	
-	/* configure EXTI line 11 */
-	EXTI_InitStructure.EXTI_Line = EXTI_Line11;
-	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;
-	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-	EXTI_Init(&EXTI_InitStructure);
+//	/* binding B11 to EXTI line */
+//	GPIO_EXTILineConfig(GPIO_PortSourceGPIOB, GPIO_PinSource11);
+//	
+//	/* configure EXTI line 11 */
+//	EXTI_InitStructure.EXTI_Line = EXTI_Line11;
+//	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
+//	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;
+//	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+//	EXTI_Init(&EXTI_InitStructure);
 
 }
 
 void NVIC_Configure(void)
 {
-	NVIC_InitTypeDef NVIC_InitStructure;
-	NVIC_PriorityGroupConfig ( NVIC_PriorityGroup_0 );
+//	NVIC_InitTypeDef NVIC_InitStructure;
+//	NVIC_PriorityGroupConfig ( NVIC_PriorityGroup_0 );
 
-#ifdef USE_USART1
-	//interrupt priority
-	NVIC_InitStructure.NVIC_IRQChannel            = USART1_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd         = ENABLE;
-	NVIC_Init ( &NVIC_InitStructure );
-#endif
+//#ifdef USE_USART1
+//	//interrupt priority
+//	NVIC_InitStructure.NVIC_IRQChannel            = USART1_IRQn;
+//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+//	NVIC_InitStructure.NVIC_IRQChannelCmd         = ENABLE;
+//	NVIC_Init ( &NVIC_InitStructure );
+//#endif
+//	
+//	NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
+//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+//	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+//	NVIC_Init(&NVIC_InitStructure);
 	
-	NVIC_InitStructure.NVIC_IRQChannel = EXTI15_10_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
+//	NVIC_InitStructure.NVIC_IRQChannel            = USART3_IRQn;
+//	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+//	NVIC_InitStructure.NVIC_IRQChannelCmd         = ENABLE;
+//	NVIC_Init ( &NVIC_InitStructure );
 }
 
 

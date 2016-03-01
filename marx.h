@@ -109,11 +109,15 @@ class Marx {
 
 class Console {
 	private:
+		bool trigger_status;
+		bool repetition;
+	
 	public:
 		Console(int16_t * _val, int16_t * _min, int16_t * _max, float * _unit);
 		~Console() {};
 			
 		Param16 * pParameter[3];
+		int16_t Times_Cnt;
 		bool isConsoleUpdated;
 			
 		/* Value: get, set */
@@ -139,6 +143,19 @@ class Console {
 		};
 		void setUpdated(uint8_t _mp_type, bool state)  {
 			pParameter[_mp_type]->isUpdated = state;
+		};
+		
+		bool inTrigger() {
+			return trigger_status;
+		};
+		void setTrigger(bool state) {
+			trigger_status = state;
+		};
+		bool Repetition() {
+			return repetition; 
+		};
+		void setRepetition(bool state) {
+			repetition = state;
 		};
 };
 

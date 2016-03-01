@@ -1,6 +1,5 @@
 #include "task.h"
 #include "lcd.h"
-#include "variables.h"
 
 
 #define LIST_X_OFFSET 6	// the x offset of item list displayed on the screen
@@ -113,8 +112,7 @@ void task_LCD (void const * arg)
 	
 	for(;;)
 	{	
-		LED_Set(GPIO_LED_BL, LED_ON);
-		if (Main_Menu.isMenuUpdated) LED_Set(GPIO_LED_GR, LED_ON);
+		LED_Set(GPIO_LED_GR, LED_ON);
 		/* ***************************************************************
 		 * 						Parameter List
 		 * ***************************************************************
@@ -251,34 +249,43 @@ void task_LCD (void const * arg)
 			LCD19264.Print(3, STATUS_X_OFFSET, "          ");
 		}
 				
-		/* Trigger Status for voltage+current system */
-		if (Status0 != Voltage_Source.getValue(MP_TRIGGER) || Main_Menu.isPageChanged || blink==0 || Main_Menu.isMenuUpdated) {
-			Status0 = Voltage_Source.getValue(MP_TRIGGER);
-			LCD19264.Print(2, STATUS_X_OFFSET, "%s", Status0? " Volt. On " : "          ");
+		/* Trigger Status & Blink Effect*/
+		if (Main_Console.inTrigger()) {
+			if (blink==0 || Main_Menu.isMenuUpdated) {
+				LCD19264.Print(2, 1, "%s", "触发中");
+			}
+			if (Main_Console.Repetition() )
+					LCD19264.Print(3, 1, "%s", "重频");
+				else
+					LCD19264.Print(3, 1, "%s%2d%s", "剩余", Main_Console.Times_Cnt, "次");
 		}
-		if (Status1 != Current_Source.getValue(MP_TRIGGER) || Main_Menu.isPageChanged || blink==0 || Main_Menu.isMenuUpdated) {
-			Status1 = Current_Source.getValue(MP_TRIGGER);
-			LCD19264.Print(3, STATUS_X_OFFSET, "%s", Status1? " Curr. On " : "          ");
+		else {
+			if (Status0 != Voltage_Source.getValue(MP_TRIGGER) || blink==0 || Main_Menu.isMenuUpdated) {
+				Status0 = Voltage_Source.getValue(MP_TRIGGER);
+				LCD19264.Print(2, STATUS_X_OFFSET, "%s", Status0? " Volt. On " : "          ");
+			}
+			if (Status1 != Current_Source.getValue(MP_TRIGGER) || blink==0 || Main_Menu.isMenuUpdated) {
+				Status1 = Current_Source.getValue(MP_TRIGGER);
+				LCD19264.Print(3, STATUS_X_OFFSET, "%s", Status1? " Curr. On " : "          ");
+			}
 		}
-		if (blink == 32 && (Status0 || Status1)) {
+		// blink effect
+		if (blink == 8 && ((Status0 || Status1) || Main_Console.inTrigger())) {
 			LCD19264.Print(2, STATUS_X_OFFSET, "%s", "          ");
 			LCD19264.Print(3, STATUS_X_OFFSET, "%s", "          ");
 		}
-		blink=(blink+1)%64;
+		blink=(blink+1)%16;
 		
 		Main_Menu.isPageChanged = false;
 		Main_Menu.isMenuUpdated = false;
-	
-		
+				
 		/* LED Display */
 		if (Voltage_Source.getValue(MP_TRIGGER))
 			LED_Set(GPIO_LED_YL, LED_ON);
 		else
 			LED_Set(GPIO_LED_YL, LED_OFF);
 		
-		
-		LED_Set(GPIO_LED_BL, LED_OFF);
 		LED_Set(GPIO_LED_GR, LED_OFF);
-		osDelay(100);
+		osDelay(60);
 	}
 }

@@ -3,6 +3,7 @@
 
 #include "peripheral.h"
 #include "cmsis_os.h"
+#include "variables.h"
 
 extern void task_LCD(void const * arg);
 extern void task_Button(void const * arg);

@@ -52,6 +52,7 @@ bool Menu::onButton(uint8_t button) {
 			// if this parameter is a toggle, than just flip it
 			else if (cursor->isToggle()) {
 				cursor->pItem->Exec();
+				cursor->pItem->isItemUpdated = true;
 			}
 			// otherwise, select it
 			else if (cursor->isParam()){

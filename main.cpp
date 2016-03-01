@@ -9,6 +9,7 @@
 /*  
  * Marx Function
  * Automatically generate menu item
+ nvic registeration, swinterrupt
 */
 
 int main (void) 
@@ -27,13 +28,7 @@ int main (void)
 	osKernelStart ();
 	
 	static uint8_t a=0;
-	for (;;)
-	{
-		if (a%2) 
-			LED_Set(GPIO_LED_RD, LED_ON);
-		else 
-			LED_Set(GPIO_LED_RD, LED_OFF);
-		
+	for (;;) {		
 		if (!(a%64)) 
 			Main_Menu.isMenuUpdated = true;
 		

@@ -10,7 +10,7 @@ void Menu_Init() {
 	Main_Menu.setRoot(new Menu_Node(-1, pitem_root));
 	
 	/* Trigger Mode Setting */
-	Item * pitem_ctrl = new Item(ITEM_FOLDER, "触发方式");
+	Item * pitem_ctrl = new Item(ITEM_FOLDER, "重频设置");
 	Main_Menu.Menu_Insert(0, pitem_ctrl, -1);
 		// submenu
 		Main_Menu.Menu_Insert(1, new Item(ITEM_TIMES, Main_Console.pParameter[CP_TIMES], "次数%6s%s"), 0);

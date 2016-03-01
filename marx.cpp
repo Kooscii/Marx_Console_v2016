@@ -82,6 +82,9 @@ Console::Console(int16_t * _val, int16_t * _min, int16_t * _max, float * _unit) 
 	for (i=0; i<3; i++)
 		pParameter[i] = new Param16(_val[i], _min[i], _max[i], _unit[i]);
 	
+	Times_Cnt = 0;
+	trigger_status = false;
+	repetition = false;
 	isConsoleUpdated = true;
 }
 

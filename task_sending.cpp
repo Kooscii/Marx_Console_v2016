@@ -1,5 +1,4 @@
 #include "task.h"
-#include "variables.h"
 
 
 #define USART_CONTROL_BOX_FPGA USART3
@@ -55,20 +54,24 @@ void task_Sending (void const * arg)
 		for (i=0; i<Voltage_Source.getQty(); i++) {
 			// if parameters updated	
 			/* Width */
-			if (Voltage_Source.isUpdated(MP_PULSEWIDTH)) {
+			if (Voltage_Source.isUpdated(MP_PULSEWIDTH) || Voltage_Source.isMarxUpdated) {
 				Voltage_Source.setUpdated(MP_PULSEWIDTH, false);
 				UpdatedCnt_V[0][i][0] = 3;
 			}
-			if (UpdatedCnt_V[0][i][0]--)
+			if (UpdatedCnt_V[0][i][0]) {
+				UpdatedCnt_V[0][i][0]--;
 				send_data(0x80|i, 0xC2, Voltage_Source.getValue(MP_PULSEWIDTH)*5);
+			}
 
 			
-			if (Voltage_Source.isUpdated(MP_PULSEDELAY)) {
+			if (Voltage_Source.isUpdated(MP_PULSEDELAY) || Voltage_Source.isMarxUpdated) {
 				Voltage_Source.setUpdated(MP_PULSEDELAY, false);
 				UpdatedCnt_V[0][i][1] = 3;
 			}
-			if (UpdatedCnt_V[0][i][1]--)
+			if (UpdatedCnt_V[0][i][1]) {
+				UpdatedCnt_V[0][i][1]--;
 				send_data(0x80|i, 0xC6, Voltage_Source.getValue(MP_PULSEDELAY)*5);
+			}
 			
 			/* fpga status updating */
 			Voltage_Source.setUpdated(MP_TRIGGER, false);
@@ -80,24 +83,30 @@ void task_Sending (void const * arg)
 			
 			osDelay(1);		// let this thread be paused or it will occupy too much resource as it has a high priority
 		}
+		Voltage_Source.isMarxUpdated = false;
+		
 		osDelay(1);
 
 		/* Sending Current Source's Parameters */
 		for (i=0; i<Current_Source.getQty(); i++)  {
 			// if parameter updated
-			if (Current_Source.isUpdated(MP_PULSEWIDTH)) {
+			if (Current_Source.isUpdated(MP_PULSEWIDTH) || Current_Source.isMarxUpdated) {
 				Current_Source.setUpdated(MP_PULSEWIDTH, false);
 				UpdatedCnt_C[0][i][0] = 3;
 			}
-			if (UpdatedCnt_C[0][i][0]--)
+			if (UpdatedCnt_C[0][i][0]) {
+				UpdatedCnt_C[0][i][0]--;
 				send_data(0x80|i, 0xC3, Current_Source.getValue(MP_PULSEWIDTH)*5);
+			}
 			
-			if (Current_Source.isUpdated(MP_PULSEDELAY)) {
+			if (Current_Source.isUpdated(MP_PULSEDELAY) || Current_Source.isMarxUpdated) {
 				Current_Source.setUpdated(MP_PULSEDELAY, false);
 				UpdatedCnt_C[0][i][1] = 3;
 			}
-			if (UpdatedCnt_C[0][i][1]--)
+			if (UpdatedCnt_C[0][i][1]) {
+				UpdatedCnt_C[0][i][1]--;
 				send_data(0x80|i, 0xC7, Current_Source.getValue(MP_PULSEDELAY)*5);
+			}
 			
 			/* fpga status updating */
 			Current_Source.setUpdated(MP_TRIGGER, false);
@@ -109,10 +118,11 @@ void task_Sending (void const * arg)
 			
 			osDelay(1);		// let this thread be paused or it will occupy too much resource as it has a high priority
 		}
+		Current_Source.isMarxUpdated = false;
 		
 		Main_Console.setUpdated(CP_FREQ, false);
 		Main_Console.setUpdated(CP_TIMES, false);
 		
-		osDelay(50);
+		osDelay(20);
 	}
 }
