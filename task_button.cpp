@@ -25,7 +25,8 @@ void task_Button(void const * arg)
 				Main_Menu.onButton(BTN_LEFT);
 			}
 			else {
-				Main_Menu.onButton(BTN_RIGHT);
+//				Main_Menu.onButton(BTN_RIGHT);
+				osTimerStart(id_tmr_trigger, 1);
 			}
 			isPressed = true;
 		}

@@ -262,11 +262,11 @@ void task_LCD (void const * arg)
 		else {
 			if (Status0 != Voltage_Source.getValue(MP_TRIGGER) || blink==0 || Main_Menu.isMenuUpdated) {
 				Status0 = Voltage_Source.getValue(MP_TRIGGER);
-				LCD19264.Print(2, STATUS_X_OFFSET, "%s", Status0? " Volt. On " : "          ");
+				LCD19264.Print(2, STATUS_X_OFFSET, "%s", Status0? "  注意    " : "          ");
 			}
-			if (Status1 != Current_Source.getValue(MP_TRIGGER) || blink==0 || Main_Menu.isMenuUpdated) {
+			if (Status1 != Voltage_Source.getValue(MP_TRIGGER) || blink==0 || Main_Menu.isMenuUpdated) {
 				Status1 = Current_Source.getValue(MP_TRIGGER);
-				LCD19264.Print(3, STATUS_X_OFFSET, "%s", Status1? " Curr. On " : "          ");
+				LCD19264.Print(3, STATUS_X_OFFSET, "%s", Status1? "已允许触发" : "          ");
 			}
 		}
 		// blink effect

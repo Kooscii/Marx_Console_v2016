@@ -14,6 +14,8 @@
 
 int main (void) 
 {	
+	static uint8_t a=0;
+	
 	Peripheral_Configure();
 	Menu_Init();
 		
@@ -27,13 +29,11 @@ int main (void)
 	osTaskInitialize();
 	osKernelStart ();
 	
-	static uint8_t a=0;
-	for (;;) {		
+	
+	for (;;) {
 		if (!(a%64)) 
 			Main_Menu.isMenuUpdated = true;
-		
 		a++;
-		
 		osDelay(1000);
 	}
 }

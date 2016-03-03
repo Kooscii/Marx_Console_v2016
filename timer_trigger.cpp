@@ -13,16 +13,9 @@ inline void pulse_delay() {
 }
 
 inline void TRIGGER() {
-	LED_Set(GPIO_LED_RD, LED_ON);
-	
 	GPIO_SetBits(GPIO_TRG);
 	pulse_delay();
 	GPIO_ResetBits(GPIO_TRG);
-	
-	LED_Set(GPIO_LED_RD, LED_OFF);
-	
-	Voltage_Source.isMarxUpdated = true;
-	Current_Source.isMarxUpdated = true;
 }
 
 void timer_Trigger(void const *arg) {
@@ -32,7 +25,11 @@ void timer_Trigger(void const *arg) {
 			Main_Console.setRepetition(!Main_Console.Times_Cnt);
 			Main_Console.setTrigger(true);
 
+			LED_Set(GPIO_LED_RD, LED_ON);
 //			TRIGGER();
+			
+			Voltage_Source.isMarxUpdated = true;
+			Current_Source.isMarxUpdated = true;
 			 
 			// if repetition mode, times always assigned to 1
 			if (Main_Console.Repetition()) 
@@ -55,7 +52,11 @@ void timer_Trigger(void const *arg) {
 				osTimerStop(id_tmr_trigger);
 			}
 			else {
+				LED_Set(GPIO_LED_RD, LED_ON);
 				TRIGGER();
+				
+				Voltage_Source.isMarxUpdated = true;
+				Current_Source.isMarxUpdated = true;
 				 
 				// if repetition mode, times always assigned to 1
 				if (Main_Console.Repetition()) 
@@ -79,4 +80,6 @@ void timer_Trigger(void const *arg) {
 		Main_Console.setTrigger(false);
 		osTimerStop(id_tmr_trigger);
 	}
+	osDelay(200);
+	LED_Set(GPIO_LED_RD, LED_OFF);
 }
