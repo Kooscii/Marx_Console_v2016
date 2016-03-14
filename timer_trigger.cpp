@@ -26,7 +26,7 @@ void timer_Trigger(void const *arg) {
 			Main_Console.setTrigger(true);
 
 			LED_Set(GPIO_LED_RD, LED_ON);
-//			TRIGGER();
+			TRIGGER();
 			
 			Voltage_Source.isMarxUpdated = true;
 			Current_Source.isMarxUpdated = true;

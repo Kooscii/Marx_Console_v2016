@@ -34,7 +34,7 @@ bool Menu::onButton(uint8_t button) {
 				isCursorChanged = true;
 			}
 			// if cursor isn't selected, back to parent menu. if parent is root, do nothing
-			else if (cursor->Tp!=root){
+			else if (cursor->Tp->Tp!=root){
 				setCursor(cursor->Tp);
 				setPage(page->Tp);
 			}

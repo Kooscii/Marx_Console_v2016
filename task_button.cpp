@@ -25,8 +25,7 @@ void task_Button(void const * arg)
 				Main_Menu.onButton(BTN_LEFT);
 			}
 			else {
-//				Main_Menu.onButton(BTN_RIGHT);
-				osTimerStart(id_tmr_trigger, 1);
+				Main_Menu.onButton(BTN_RIGHT);
 			}
 			isPressed = true;
 		}
@@ -48,6 +47,12 @@ void task_Button(void const * arg)
 		/* Button ENCODER */
 		else if (GPIO_ReadInputDataBit(GPIO_BTN_ENC)==RESET) {
 			Main_Menu.setSpec();
+//			if (GPIO_ReadInputDataBit(GPIO_BTN_SET)==RESET && !isTFB) {
+//				isTFB=true;
+//				osTimerStart(id_tmr_trigger, 1);
+//			}
+//			else if (GPIO_ReadInputDataBit(GPIO_BTN_SET)==SET)
+//				isTFB=false;
 		}
 		else if (GPIO_ReadInputDataBit(GPIO_BTN_ENC)!=RESET) {
 			Main_Menu.resetSpec();

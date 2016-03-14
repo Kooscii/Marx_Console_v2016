@@ -114,7 +114,7 @@ void task_Sending (void const * arg)
 			
 			/* fpga pwm updating */
 			Current_Source.setUpdated(MP_PULSEVOLTAGE, false);
-			send_data(0x80|i, 0xC4, Current_Source.getValue(MP_TRIGGER)? ((uint16_t)(Voltage_Source.getValue(MP_PULSEVOLTAGE)/Voltage_Source.getQty()))*prc: 0);
+			send_data(0x80|i, 0xC4, Voltage_Source.getValue(MP_TRIGGER)? ((uint16_t)(Current_Source.getValue(MP_PULSEVOLTAGE)/Current_Source.getQty()))*prc: 0);
 			
 			osDelay(1);		// let this thread be paused or it will occupy too much resource as it has a high priority
 		}

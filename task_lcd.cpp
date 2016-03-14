@@ -212,19 +212,31 @@ void task_LCD (void const * arg)
 						else LCD19264.Print(i, LIST_X_OFFSET-1, Main_Menu.isCursorSelected? " *" : " >");
 					}
 					else {
-						if (i==0) LCD19264.Print(i, LIST_X_OFFSET-1, "%c%c", 0xA9, 0xD0);
+						if (i==0) {
+							if (item_list[i]->Tprev == NULL)
+								LCD19264.Print(i, LIST_X_OFFSET-1, "%c%c", 0xA9, 0xD0);
+							else
+								LCD19264.Print(i, LIST_X_OFFSET-1, "%c%c", 0xA9, 0xE0);
+						}
 						else if (i==1 || i==2) {
 							if (item_list[i+1]==NULL) LCD19264.Print(i, LIST_X_OFFSET-1, "%c%c", 0xA9, 0xB8);
 							else LCD19264.Print(i, LIST_X_OFFSET-1, "%c%c", 0xA9, 0xC0);
 						}
-						else if (i==3) LCD19264.Print(i, LIST_X_OFFSET-1, "%c%c", 0xA9, 0xB8);
+						else if (i==3 && item_list[i]->Tnext == NULL) 
+							LCD19264.Print(i, LIST_X_OFFSET-1, "%c%c", 0xA9, 0xB8);
+						else 
+							LCD19264.Print(i, LIST_X_OFFSET-1, "%c%c", 0xA9, 0xC0);
 					}
 				}
 				// clear the flag
 				item_list[i]->pItem->isItemUpdated = false;
 			}
-			else
-				if (isListUpdated) LCD19264.Print(i, LIST_X_OFFSET-1, "              ");
+			else {
+				if (isListUpdated || Main_Menu.isMenuUpdated) {
+					LCD19264.Print(i, LIST_X_OFFSET-1, "              ");
+//					LCD19264.Print(i, LIST_X_OFFSET-1, "%c%c", 0xA9, 0xA6);
+				}
+			}
 		}
 		Main_Menu.isCursorChanged = false;
 		isListUpdated = false;
@@ -265,7 +277,7 @@ void task_LCD (void const * arg)
 				LCD19264.Print(2, STATUS_X_OFFSET, "%s", Status0? "  注意    " : "          ");
 			}
 			if (Status1 != Voltage_Source.getValue(MP_TRIGGER) || blink==0 || Main_Menu.isMenuUpdated) {
-				Status1 = Current_Source.getValue(MP_TRIGGER);
+				Status1 = Voltage_Source.getValue(MP_TRIGGER);
 				LCD19264.Print(3, STATUS_X_OFFSET, "%s", Status1? "已允许触发" : "          ");
 			}
 		}

@@ -13,9 +13,9 @@ void Menu_Init() {
 	Item * pitem_ctrl = new Item(ITEM_FOLDER, "重频设置");
 	Main_Menu.Menu_Insert(0, pitem_ctrl, -1);
 		// submenu
-		Main_Menu.Menu_Insert(1, new Item(ITEM_TIMES, Main_Console.pParameter[CP_TIMES], "次数%6s%s"), 0);
-		Main_Menu.Menu_Insert(2, new Item(ITEM_PARAM16, Main_Console.pParameter[CP_FREQ], "频率%6.2fHz"), 0);
-		Main_Menu.Menu_Insert(3, new Item(ITEM_TOGGLE, Voltage_Source.Entirety[MP_TRIGGER], "触发%8s", (char**)tag_onoff), 0);
+		Main_Menu.Menu_Insert(1, new Item(ITEM_TOGGLE, Voltage_Source.Entirety[MP_TRIGGER], "触发%8s", (char**)tag_onoff), 0);
+		Main_Menu.Menu_Insert(2, new Item(ITEM_TIMES, Main_Console.pParameter[CP_TIMES], "次数%6s%s"), 0);
+		Main_Menu.Menu_Insert(3, new Item(ITEM_PARAM16, Main_Console.pParameter[CP_FREQ], "频率%6.2fHz"), 0);
 	
 	/* Voltage Source Setting */
 	Item * pitem_voltsrc = new Item(ITEM_FOLDER, "电压源参数");
@@ -23,8 +23,8 @@ void Menu_Init() {
 		// submenu
 //		Main_Menu.Menu_Insert(11, new Item(ITEM_TOGGLE,  Voltage_Source.Entirety[MP_TRIGGER],      "触发%8s", (char**)tag_onoff), 10);
 		Main_Menu.Menu_Insert(12, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEVOLTAGE], "电压%6.1fkV"), 10);
-		Main_Menu.Menu_Insert(13, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEWIDTH],   "脉宽%6.1fkV"), 10);
-		Main_Menu.Menu_Insert(14, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEDELAY],   "延时%6.1fkV"), 10);
+		Main_Menu.Menu_Insert(13, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEWIDTH],   "脉宽%6.1fus"), 10);
+		Main_Menu.Menu_Insert(14, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEDELAY],   "延时%6.1fus"), 10);
 	
 	/* Current Source Setting */
 	Item * pitem_currsrc = new Item(ITEM_FOLDER, "电流源参数");
@@ -32,8 +32,8 @@ void Menu_Init() {
 		// submenu
 //		Main_Menu.Menu_Insert(21, new Item(ITEM_TOGGLE,  Current_Source.Entirety[MP_TRIGGER],      "触发%8s", (char**)tag_onoff), 20);
 		Main_Menu.Menu_Insert(22, new Item(ITEM_PARAM16, Current_Source.Entirety[MP_PULSEVOLTAGE], "电压%6.1fkV"), 20);
-		Main_Menu.Menu_Insert(23, new Item(ITEM_PARAM16, Current_Source.Entirety[MP_PULSEWIDTH],   "脉宽%6.1fkV"), 20);
-		Main_Menu.Menu_Insert(24, new Item(ITEM_PARAM16, Current_Source.Entirety[MP_PULSEDELAY],   "延时%6.1fkV"), 20);
+		Main_Menu.Menu_Insert(23, new Item(ITEM_PARAM16, Current_Source.Entirety[MP_PULSEWIDTH],   "脉宽%6.1fus"), 20);
+		Main_Menu.Menu_Insert(24, new Item(ITEM_PARAM16, Current_Source.Entirety[MP_PULSEDELAY],   "延时%6.1fus"), 20);
 	
 	/* System Setting */
 	Item * pitem_setting = new Item(ITEM_FOLDER, "系统设置");
@@ -45,7 +45,7 @@ void Menu_Init() {
 	
 	
 	// initialize page
-	Main_Menu.setPage(Main_Menu.getRoot());
+	Main_Menu.setPage(Main_Menu.getRoot()->Tchild);
 	Main_Menu.isPageChanged = true;
 	// initialize cursor
 	Main_Menu.setCursor(Main_Menu.getPage()->Tchild);
