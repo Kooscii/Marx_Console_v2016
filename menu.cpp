@@ -12,7 +12,7 @@ bool Menu::onButton(uint8_t button) {
 		case BTN_LEFT:
 			if (page->Tp->getID()==-1 && page->Tprev && page->Tprev->getID()<1000) {
 				prevPage();
-				if (cursor->isToggle()) {
+				if (cursor->isToggle() || true) {
 					isCursorSelected = false;
 					isCursorChanged = true;
 				}
@@ -21,7 +21,7 @@ bool Menu::onButton(uint8_t button) {
 		case BTN_RIGHT:
 			if (page->Tp->getID()==-1 && page->Tnext && page->Tnext->getID()<1000) {
 				nextPage();
-				if (cursor->isToggle()) {
+				if (cursor->isToggle() || true) {
 					isCursorSelected = false;
 					isCursorChanged = true;
 				}

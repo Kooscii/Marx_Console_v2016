@@ -4,10 +4,11 @@
 /* this funtion realizes the delta of encoder being non-linear 
  * the faster the encoder being rotated, the more will delta's increase be accelerated */ 
 inline int16_t Non_Linear(int16_t val) { 
-	if (val>=0)
-		return (int16_t)((val*val));
-	else 
-		return (int16_t)(-(val*val));
+//	if (val>=0)
+//		return (int16_t)((val*val));
+//	else 
+//		return (int16_t)(-(val*val));
+	return val*val*val;
 };
 
 void task_Button(void const * arg)
@@ -35,27 +36,36 @@ void task_Button(void const * arg)
 				Main_Console.Times_Cnt = 0;
 				osTimerStart(id_tmr_trigger, 1);
 			}
-			else
-				Main_Menu.onButton(BTN_CANCEL);
-			isPressed = true;
+			else {
+//				Main_Menu.onButton(BTN_CANCEL);
+				Voltage_Source.setValue(MP_TRIGGER, 0);
+			}
+			isPressed = true; 
 		}
 		/* Button SET */
 		else if (GPIO_ReadInputDataBit(GPIO_BTN_SET)==RESET && !isPressed) {
-			Main_Menu.onButton(BTN_OK);
+			Voltage_Source.setValue(MP_TRIGGER, 1);
 			isPressed = true;
 		}
 		/* Button ENCODER */
-		else if (GPIO_ReadInputDataBit(GPIO_BTN_ENC)==RESET) {
-			Main_Menu.setSpec();
-//			if (GPIO_ReadInputDataBit(GPIO_BTN_SET)==RESET && !isTFB) {
-//				isTFB=true;
-//				osTimerStart(id_tmr_trigger, 1);
-//			}
-//			else if (GPIO_ReadInputDataBit(GPIO_BTN_SET)==SET)
-//				isTFB=false;
+		else if (GPIO_ReadInputDataBit(GPIO_BTN_ENC)==RESET && !isPressed) {
+//			Main_Menu.setSpec();
+////			if (GPIO_ReadInputDataBit(GPIO_BTN_SET)==RESET && !isTFB) {
+////				isTFB=true;
+////				osTimerStart(id_tmr_trigger, 1);
+////			}
+////			else if (GPIO_ReadInputDataBit(GPIO_BTN_SET)==SET)
+////				isTFB=false;
+			Main_Menu.onButton(BTN_OK);
+			isPressed = true;
 		}
-		else if (GPIO_ReadInputDataBit(GPIO_BTN_ENC)!=RESET) {
-			Main_Menu.resetSpec();
+//		else if (GPIO_ReadInputDataBit(GPIO_BTN_ENC)!=RESET) {
+//			Main_Menu.resetSpec();
+//		}
+		
+		// reducing scanning speed if the user hold the button down
+		if (GPIO_ReadInputDataBit(GPIO_BTN_LT)==SET && GPIO_ReadInputDataBit(GPIO_BTN_RT)==SET && GPIO_ReadInputDataBit(GPIO_BTN_BCK)==SET && GPIO_ReadInputDataBit(GPIO_BTN_SET)==SET && GPIO_ReadInputDataBit(GPIO_BTN_ENC)==SET) {
+			isPressed = false;
 		}
 		
 		Encoder_CNT = TIM2->CNT;			// get the current encoder cnt, it should be 0x8f by default
@@ -71,11 +81,8 @@ void task_Button(void const * arg)
 			isTFB=false;
 		}
 		
-		// reducing scanning speed if the user hold the button down
-		if (GPIO_ReadInputDataBit(GPIO_BTN_LT)==SET && GPIO_ReadInputDataBit(GPIO_BTN_RT)==SET && GPIO_ReadInputDataBit(GPIO_BTN_BCK)==SET && GPIO_ReadInputDataBit(GPIO_BTN_SET)==SET) {
-			isPressed = false;
-		}
+	
 		
-		osDelay(50);
+		osDelay(20);
 	}
 }

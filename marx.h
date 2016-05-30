@@ -26,7 +26,7 @@
 
 #define TIMES_UNIT      (1)
 #define INTERVAL_UNIT   (1)
-#define FREQ_UNIT		(0.01)
+#define FREQ_UNIT		(0.1)
 
 /* Source Type */
 #define VOLTAGE_SOURCE      0

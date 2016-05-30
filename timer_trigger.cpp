@@ -25,8 +25,8 @@ void timer_Trigger(void const *arg) {
 			Main_Console.setRepetition(!Main_Console.Times_Cnt);
 			Main_Console.setTrigger(true);
 
-			LED_Set(GPIO_LED_RD, LED_ON);
-			TRIGGER();
+			LED_Set(GPIO_LED_YL, LED_ON);
+			//TRIGGER();
 			
 			Voltage_Source.isMarxUpdated = true;
 			Current_Source.isMarxUpdated = true;
@@ -43,7 +43,7 @@ void timer_Trigger(void const *arg) {
 				osTimerStop(id_tmr_trigger);
 			}
 			else
-				osTimerStart(id_tmr_trigger, (uint32_t)(100000.0/Main_Console.getValue(CP_FREQ))-1);
+				osTimerStart(id_tmr_trigger, (uint32_t)(10000.0/Main_Console.getValue(CP_FREQ))-1);
 		}
 		else {
 			if (Main_Console.Times_Cnt==0) {
@@ -52,7 +52,7 @@ void timer_Trigger(void const *arg) {
 				osTimerStop(id_tmr_trigger);
 			}
 			else {
-				LED_Set(GPIO_LED_RD, LED_ON);
+				LED_Set(GPIO_LED_YL, LED_ON);
 				TRIGGER();
 				
 				Voltage_Source.isMarxUpdated = true;
@@ -70,7 +70,7 @@ void timer_Trigger(void const *arg) {
 					osTimerStop(id_tmr_trigger);
 				}
 				else
-					osTimerStart(id_tmr_trigger, (uint32_t)(100000.0/Main_Console.getValue(CP_FREQ))-1);
+					osTimerStart(id_tmr_trigger, (uint32_t)(10000.0/Main_Console.getValue(CP_FREQ))-1);
 			}
 		}
 	}
@@ -80,6 +80,6 @@ void timer_Trigger(void const *arg) {
 		Main_Console.setTrigger(false);
 		osTimerStop(id_tmr_trigger);
 	}
-	osDelay(200);
-	LED_Set(GPIO_LED_RD, LED_OFF);
+	osDelay(10);
+	LED_Set(GPIO_LED_YL, LED_OFF);
 }

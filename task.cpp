@@ -5,7 +5,7 @@ osThreadDef(task_LCD , osPriorityBelowNormal, 1, 1000);
 osThreadId id_tsk_lcd;
 
 /* Task: Button */
-osThreadDef(task_Button, osPriorityNormal , 1, 0);
+osThreadDef(task_Button, osPriorityAboveNormal , 1, 0);
 osThreadId id_tsk_btn;
 
 /* Task: Sending */

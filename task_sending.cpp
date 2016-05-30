@@ -8,16 +8,22 @@ inline void send_data(uint8_t addr, uint8_t cmd, uint16_t data)
 {
 	while(USART_GetFlagStatus(USART_CONTROL_BOX_FPGA, USART_FLAG_TC) == RESET);
 	USART_SendData(USART_CONTROL_BOX_FPGA, addr);
+	osDelay(1);
 	while(USART_GetFlagStatus(USART_CONTROL_BOX_FPGA, USART_FLAG_TC) == RESET);
 	USART_SendData(USART_CONTROL_BOX_FPGA, cmd);
+	osDelay(1);
 	while(USART_GetFlagStatus(USART_CONTROL_BOX_FPGA, USART_FLAG_TC) == RESET);
 	USART_SendData(USART_CONTROL_BOX_FPGA, (data>>8)&0xff);
+	osDelay(1);
 	while(USART_GetFlagStatus(USART_CONTROL_BOX_FPGA, USART_FLAG_TC) == RESET);
 	USART_SendData(USART_CONTROL_BOX_FPGA, data&0xff);
+	osDelay(1);
 	while(USART_GetFlagStatus(USART_CONTROL_BOX_FPGA, USART_FLAG_TC) == RESET);
 	USART_SendData(USART_CONTROL_BOX_FPGA, 0x00);
+	osDelay(1);
 	while(USART_GetFlagStatus(USART_CONTROL_BOX_FPGA, USART_FLAG_TC) == RESET);
 	USART_SendData(USART_CONTROL_BOX_FPGA, 0x00);
+	osDelay(1);
 }
 
 
@@ -26,7 +32,7 @@ void task_Sending (void const * arg)
 	uint8_t i,j,k;
 	//int16_t stage_polarity, stage_width, stage_delay, stage_pwm;
 //	static uint16_t cf=1500, dz=500, stage_data; 
-	static uint16_t pr=30, prc=30;
+	static uint16_t pr=50, prc=30;
 	uint8_t UpdatedCnt_V[2][2][4], UpdatedCnt_C[2][2][4];
 	
 	for (i=0; i<2; i++) {
@@ -80,12 +86,8 @@ void task_Sending (void const * arg)
 			/* fpga pwm updating */
 			Voltage_Source.setUpdated(MP_PULSEVOLTAGE, false);
 			send_data(0x80|i, 0xC1, Voltage_Source.getValue(MP_TRIGGER)? ((uint16_t)(Voltage_Source.getValue(MP_PULSEVOLTAGE)/Voltage_Source.getQty()))*pr: 0);
-			
-			osDelay(1);		// let this thread be paused or it will occupy too much resource as it has a high priority
 		}
 		Voltage_Source.isMarxUpdated = false;
-		
-		osDelay(1);
 
 		/* Sending Current Source's Parameters */
 		for (i=0; i<Current_Source.getQty(); i++)  {
@@ -114,9 +116,7 @@ void task_Sending (void const * arg)
 			
 			/* fpga pwm updating */
 			Current_Source.setUpdated(MP_PULSEVOLTAGE, false);
-			send_data(0x80|i, 0xC4, Voltage_Source.getValue(MP_TRIGGER)? ((uint16_t)(Current_Source.getValue(MP_PULSEVOLTAGE)/Current_Source.getQty()))*prc: 0);
-			
-			osDelay(1);		// let this thread be paused or it will occupy too much resource as it has a high priority
+			send_data(0x80|i, 0xC4, Voltage_Source.getValue(MP_TRIGGER)? ((uint16_t)(Current_Source.getValue(MP_PULSEVOLTAGE)/Current_Source.getQty()))*prc: 0);			
 		}
 		Current_Source.isMarxUpdated = false;
 		

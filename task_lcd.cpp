@@ -293,9 +293,9 @@ void task_LCD (void const * arg)
 				
 		/* LED Display */
 		if (Voltage_Source.getValue(MP_TRIGGER))
-			LED_Set(GPIO_LED_YL, LED_ON);
+			LED_Set(GPIO_LED_RD, LED_ON);
 		else
-			LED_Set(GPIO_LED_YL, LED_OFF);
+			LED_Set(GPIO_LED_RD, LED_OFF);
 		
 		LED_Set(GPIO_LED_GR, LED_OFF);
 		osDelay(60);
