@@ -1,6 +1,8 @@
 #ifndef CONFIGURATION_H_
 #define CONFIGURATION_H_
 
+#include "stm32f10x.h"
+
 //#define USE_USART1
 //#define USE_USART2
 #define USE_USART3
@@ -8,6 +10,7 @@
 #define USE_BUTTON
 #define USE_LCD
 #define USE_LED
+
 
 /*********************************************
  *			    USART 1, 2, 3                *
