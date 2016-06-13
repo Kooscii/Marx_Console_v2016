@@ -5,7 +5,8 @@
 
 //#define USE_USART1
 //#define USE_USART2
-#define USE_USART3
+//#define USE_USART
+#define USE_I2C
 #define USE_ENCODER
 #define USE_BUTTON
 #define USE_LCD
@@ -32,6 +33,24 @@
 #define		GPIO_RX2	GPIO_A3
 #define		GPIO_TX3	GPIO_B10
 #define		GPIO_RX3	GPIO_B11
+
+/*********************************************/
+
+/*********************************************
+ *			     I2C                         *
+ *********************************************
+ *
+ * Mode:	I2C -> AF_PP
+ * 			
+ */
+#define		MODE_I2C		GPIO_Mode_AF_OD
+/*
+ * GPIO:	TX1 -> A9	RX1 -> A10
+ * 			TX2 -> A2	RX2 -> A3
+ * 			TX3 -> B10	RX3 -> B11
+ */ 
+#define		GPIO_I2C_SCL	GPIO_B6
+#define		GPIO_I2C_SDA	GPIO_B7
 
 /*********************************************/
 
@@ -105,8 +124,8 @@
  */
 #define		GPIO_BTN_ENC	GPIO_B9
 #define		GPIO_BTN_LT		GPIO_B8
-#define		GPIO_BTN_RT		GPIO_B7
-#define		GPIO_BTN_BCK	GPIO_B6
+#define		GPIO_BTN_RT		GPIO_C13
+#define		GPIO_BTN_BCK	GPIO_A6
 #define		GPIO_BTN_SET	GPIO_B5
 #define		GPIO_ENC_A		GPIO_A0
 #define		GPIO_ENC_B		GPIO_A1
@@ -127,8 +146,8 @@
  * GPIO:	TRG -> C13
  * 			TFB -> B11
  */
-#define		GPIO_TRG	GPIO_C13
-#define		GPIO_TFB	GPIO_B11
+#define		GPIO_TRG	GPIO_B11
+#define		GPIO_TFB	GPIO_B10
 
 /*********************************************/
 

@@ -4,15 +4,13 @@
 #include "menu.h"
 #include "variables.h"
 
-
-
-
 /* TODO list */
 /*  
  * Marx Function
  * Automatically generate menu item
  nvic registeration, swinterrupt
 */
+
 
 int main (void) 
 {	

@@ -2,7 +2,7 @@
 #include "variables.h"
 
 
-const char * const tag_onoff[] = {"关", "开"};
+const char * const tag_freq_unit[] = {"Hz", "kHz"};
 
 void Menu_Init() {
 	/* Root */
@@ -15,7 +15,8 @@ void Menu_Init() {
 		// submenu
 //		Main_Menu.Menu_Insert(1, new Item(ITEM_TOGGLE, Voltage_Source.Entirety[MP_TRIGGER], "触发%8s", (char**)tag_onoff), 0);
 		Main_Menu.Menu_Insert(2, new Item(ITEM_TIMES, Main_Console.pParameter[CP_TIMES], "次数%6s%s"), 0);
-		Main_Menu.Menu_Insert(3, new Item(ITEM_PARAM16, Main_Console.pParameter[CP_FREQ], "频率%6.1fHz"), 0);
+		Main_Menu.Menu_Insert(3, new Item(ITEM_PARAM16, Main_Console.pParameter[CP_FREQ], "频率%8.1f"), 0);
+		Main_Menu.Menu_Insert(4, new Item(ITEM_TOGGLE, Main_Console.pParameter[CP_FREQ_UNIT], "单位%8s", (char**)tag_freq_unit), 0);
 	
 	/* Voltage Source Setting */
 	Item * pitem_voltsrc = new Item(ITEM_FOLDER, "电压源参数");

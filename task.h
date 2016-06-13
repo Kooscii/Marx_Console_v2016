@@ -10,6 +10,8 @@ extern void task_Button(void const * arg);
 extern void task_Sending(void const * arg);
 extern void timer_Trigger(void const *arg);
 
+extern void TRIGGER();
+
 /* Task: LCD */
 extern osThreadId id_tsk_lcd;
 

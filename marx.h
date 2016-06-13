@@ -15,8 +15,9 @@
 
 /* Console Parameter Type */
 #define CP_TIMES			0	// Each stage's repetition setting, total times of triggers. Unit 1 times
-#define CP_FREQ				1	// Each stage's repetition setting, trigger frequency. Unit 1 Hz
-#define CP_INTERVAL			2	// Each stage's repetition setting, the interval between two triggers. Unit: 1 s
+#define CP_FREQ				1	// Each stage's repetition setting, trigger frequency. Unit 1
+#define CP_FREQ_UNIT		2	// Each stage's repetition setting, trigger frequency. Unit Hz/kHz
+#define CP_INTERVAL			3	// Each stage's repetition setting, the interval between two triggers. Unit: 1 s
  
 /* Unit */
 #define VOLTAGE_UNIT    (0.1)
@@ -116,7 +117,7 @@ class Console {
 		Console(int16_t * _val, int16_t * _min, int16_t * _max, float * _unit);
 		~Console() {};
 			
-		Param16 * pParameter[3];
+		Param16 * pParameter[5];
 		int16_t Times_Cnt;
 		bool isConsoleUpdated;
 			
