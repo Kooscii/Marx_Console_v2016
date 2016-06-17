@@ -18,7 +18,7 @@ float curr_punit[] =  {0.1,		0.1,	0.1,	1, 	1, 	1, 	1};
 Marx Current_Source(CURRENT_SOURCE, 1, curr_pval, curr_pmin, curr_pmax, curr_punit);
 
 //						  t		f		u	i
-int16_t console_pval[] = {1, 	1, 		0,	0};
+int16_t console_pval[] = {0, 	1, 		1,	0};
 int16_t console_pmin[] = {0, 	1, 		0,	0};
 int16_t console_pmax[] = {999, 	100, 	1,	9999};
 float console_punit[] =  {1,	0.1,	1,	1};

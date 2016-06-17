@@ -18,6 +18,7 @@
 #define CP_FREQ				1	// Each stage's repetition setting, trigger frequency. Unit 1
 #define CP_FREQ_UNIT		2	// Each stage's repetition setting, trigger frequency. Unit Hz/kHz
 #define CP_INTERVAL			3	// Each stage's repetition setting, the interval between two triggers. Unit: 1 s
+#define CP_TMODE			4	// Each stage's repetition setting, the interval between two triggers. Unit: 1 s
  
 /* Unit */
 #define VOLTAGE_UNIT    (0.1)

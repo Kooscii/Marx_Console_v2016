@@ -1,3 +1,4 @@
 /MDK/*.*
 /MDK/RTE/*.*
 /MDK/RTE/Device/*
+/MDK/DebugConfig/*.*

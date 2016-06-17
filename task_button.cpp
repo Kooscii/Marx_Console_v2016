@@ -99,6 +99,6 @@ void task_Button(void const * arg)
 //			isTFB=false;
 //		}
 		
-		osDelay(20);
+		osDelay(50);
 	}
 }

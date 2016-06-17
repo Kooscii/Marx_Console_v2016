@@ -97,8 +97,8 @@ void GPIO_Configure(void)
 #endif
 
 #ifdef USE_ENCODER
-	GPIO_Set(GPIO_ENC_A, MODE_ENC);
-	GPIO_Set(GPIO_ENC_A, MODE_ENC);
+	GPIO_Set(GPIO_ENC_A, MODE_ENC, GPIO_Speed_2MHz);
+	GPIO_Set(GPIO_ENC_B, MODE_ENC, GPIO_Speed_2MHz);
 #endif
 
 #ifdef USE_BUTTON
@@ -237,7 +237,7 @@ void TIM_Configure(void)
 	TIM_ICInitTypeDef  TIM_ICInitStructure;
 
 	/* ENCODER */
-	TIM_TimeBaseStructure.TIM_Prescaler     = 1;
+	TIM_TimeBaseStructure.TIM_Prescaler     = 3;
 	TIM_TimeBaseStructure.TIM_Period        = 0xff;
 	TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 	TIM_TimeBaseStructure.TIM_CounterMode   = TIM_CounterMode_Up;
@@ -245,19 +245,19 @@ void TIM_Configure(void)
 
 	TIM_ICInitStructure.TIM_Channel     = TIM_Channel_1;
 	TIM_ICInitStructure.TIM_ICPolarity  = TIM_ICPolarity_Falling;
-	TIM_ICInitStructure.TIM_ICFilter    = 0x0d;
+	TIM_ICInitStructure.TIM_ICFilter    = 0xf;
 	TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
 	TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
 	TIM_ICInit ( TIM2, &TIM_ICInitStructure );
 
 	TIM_ICInitStructure.TIM_Channel     = TIM_Channel_2;
 	TIM_ICInitStructure.TIM_ICPolarity  = TIM_ICPolarity_Falling;
-	TIM_ICInitStructure.TIM_ICFilter    = 0x0d;
+	TIM_ICInitStructure.TIM_ICFilter    = 0xf;
 	TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
 	TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
 	TIM_ICInit ( TIM2, &TIM_ICInitStructure ) ;
 
-	TIM_EncoderInterfaceConfig(TIM2, TIM_EncoderMode_TI1, TIM_ICPolarity_Falling, TIM_ICPolarity_Falling);
+	TIM_EncoderInterfaceConfig(TIM2, TIM_EncoderMode_TI12, TIM_ICPolarity_Falling, TIM_ICPolarity_Falling);
 
 	TIM_Cmd(TIM2, ENABLE);
 	

@@ -17,11 +17,34 @@ extern "C" {
 	
 }
 
-bool i2c_timeout(uint8_t _timeout) {
+inline bool i2c_timeout(uint8_t _timeout) {
 	flag_i2c_err = true;
 	osSignalWait(0x01, _timeout);
 	if (flag_i2c_err) return true;
 	else return false;
+}
+
+static uint16_t j=0, k =0, e=0;
+
+void i2c_error() {
+	uint16_t i, t;
+	
+	if (!I2C_CheckEvent(I2C1, I2C_EVENT_SLAVE_ACK_FAILURE)) {
+		j++;
+		GPIO_Set(GPIO_I2C_SCL, GPIO_Mode_Out_OD);
+		GPIO_SetBits(GPIO_I2C_SCL);
+		for(t=0; t<0xffff; t--);
+		GPIO_ResetBits(GPIO_I2C_SCL);
+		for(t=0; t<0xffff; t--);
+		GPIO_SetBits(GPIO_I2C_SCL);
+		GPIO_Set(GPIO_I2C_SCL, MODE_I2C);
+	}
+	e++;
+	I2C_SoftwareResetCmd(I2C1, ENABLE);
+	I2C_Configure();
+	DMA_Cmd(DMA1_Channel6, DISABLE);
+	DMA_ClearFlag(DMA1_FLAG_TC6);
+
 }
 
 bool I2C_WriteBytes(uint8_t _addr, uint8_t _size, ...) {
@@ -44,7 +67,10 @@ bool I2C_WriteBytes(uint8_t _addr, uint8_t _size, ...) {
 		va_end(ap);
 		
 		/* 3. Check I2C Start Signal */
-		if (!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT)) break;
+		//if (!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT)) break;
+		timeout = 10 + I2C_TIMEOUT_OFFSET;
+		while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT) && --timeout); 
+		if (!timeout) break;	
 		
 		/* 4. Send Slave Address */
 		I2C_Send7bitAddress(I2C1, _addr<<1, I2C_Direction_Transmitter);
@@ -63,16 +89,18 @@ bool I2C_WriteBytes(uint8_t _addr, uint8_t _size, ...) {
 		I2C_GenerateSTOP(I2C1, ENABLE);
 		DMA_Cmd(DMA1_Channel6, DISABLE);
 		DMA_ClearFlag(DMA1_FLAG_TC6);
+		k++;
+		
+		osDelay(1);
 		
 		return 0;
 	}
 	/* Error */
-	I2C_SoftwareResetCmd(I2C1, ENABLE);
-	I2C_Configure();
+	i2c_error();
 	return 1;
 }
 
-bool send_data(uint8_t addr, uint8_t cmd, uint16_t data) {
+inline bool send_data(uint8_t addr, uint8_t cmd, uint16_t data) {
 	uint8_t hdata, ldata;
 	
 	hdata = (uint8_t)(data>>8)&0x00FF;
@@ -87,28 +115,73 @@ bool send_data(uint8_t addr, uint8_t cmd, uint8_t hdata, uint8_t ldata) {
 
 void task_Sending (void const * arg)
 {
-	GPIO_SetBits(GPIO_TRG);
+	static float intv=0, freq=0;
+	static uint8_t i;
+	static uint16_t chop_dura=20*50, dead_zone=0.5*50, delay[6]={0}, width[6]={0};
 	
+	GPIO_SetBits(GPIO_TRG);
 	for (;;) {
+		
+		/* FREQ */
+		if (Main_Console.getValue(CP_FREQ_UNIT)) freq = 1000.0*Main_Console.getValue(CP_FREQ);
+		else freq = Main_Console.getValue(CP_FREQ);
+		send_data(0x27, 0xB2, (uint16_t)freq*10);
+		
+		intv = 10000000.0/freq-50;
+		
+//		/* Pulse Width */
+//		for (i=4; i>0; i--) {
+//			width[i-1] = (intv>1300? 1300:(intv>0? intv:0))*50;
+//			intv -= 1300;
+//		}
+		/* Pulse Width */
+		if (intv<1000) width[3] = intv*50;
+		else width[3] = 1000*50;
+		width[4] = Voltage_Source.getValue(MP_PULSEWIDTH)*5;	// Pulse Width
+		width[5] = chop_dura;									// Chop Width
+		
+		/* Pulse Delay */
+		delay[0] = 0;
+		for (i=1; i<6; i++)
+			delay[i] = delay[i-1] + width[i-1] + (width[i-1]? dead_zone:0);
+		
+		/* PWM */ 
+		send_data(0x27, 0xE1, 100, (uint8_t)(Voltage_Source.getValue(MP_PULSEVOLTAGE)/10));
+		
+		/* Pulse 1 : Trigger */
+		send_data(0x27, 0xC1, width[4]);
+		send_data(0x27, 0xD1, delay[4]);
+		
+		/* Pulse 2 : Chop */
+		send_data(0x27, 0xC2, width[5]);
+		send_data(0x27, 0xD2, delay[5]);
+		
+		/* Pulse 3 : Pre-charge */
+		for (i=0; i<4; i++) {
+			send_data(0x27, 0xC3+i, width[i]);
+			send_data(0x27, 0xD3+i, delay[i]);
+		}
+
 		/* Lock */
 		if (Voltage_Source.getValue(MP_TRIGGER)) {
-			send_data(0x27, 0xA0, 0x0001);
-			send_data(0x27, 0xA1, 0x3F3F);
+			switch (Main_Console.getValue(CP_TIMES)) {
+				case 1:		// single mode
+					send_data(0x27, 0xA0, 0x07, 0x07);
+					send_data(0x27, 0xA1, 872);
+					send_data(0x27, 0xA2, 0);
+					break;
+				default:	// rep
+					send_data(0x27, 0xA0, 0x07, 0x07);
+					send_data(0x27, 0xA1, 872);
+					send_data(0x27, 0xA2, 1292);
+					break;
+			}
 		}
 		else {
 			send_data(0x27, 0xA0, 0x0000);
 			send_data(0x27, 0xA1, 0x0000);
 		}
 		
-		/* PWM */
-		send_data(0x27, 0xE1, 100, (uint8_t)(Voltage_Source.getValue(MP_PULSEVOLTAGE)/10));
-		
-		/* Pulse Width 1 */
-		send_data(0x27, 0xC1, Voltage_Source.getValue(MP_PULSEWIDTH)*5);
-		
-		/* Pulse Delay 1 */
-		send_data(0x27, 0xD1, Voltage_Source.getValue(MP_PULSEDELAY)*5);
-		
-		osDelay(50);
+		osDelay(200);
 	}
 }
