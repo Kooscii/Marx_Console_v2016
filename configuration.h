@@ -140,7 +140,7 @@
  * Mode:	TRG -> Out_PP
  * 			TFB -> IN_FLOATING
  */
-#define		MODE_TRG	GPIO_Mode_Out_PP
+#define		MODE_TRG	GPIO_Mode_IN_FLOATING
 #define		MODE_TFB	GPIO_Mode_IN_FLOATING
 /*
  * GPIO:	TRG -> C13

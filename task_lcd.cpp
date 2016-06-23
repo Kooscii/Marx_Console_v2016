@@ -201,8 +201,8 @@ void task_LCD (void const * arg)
 			if (item_list[i] != NULL) {
 				item_cnt++;
 				// checking if this item need refreshing or not
-				if (item_list[i]->pItem->isItemUpdated || isListUpdated || Main_Menu.isMenuUpdated) {
-					LCD19264.Print(i, LIST_X_OFFSET, "            ");
+				if (item_list[i]->pItem->isItemUpdated || isListUpdated || Main_Menu.isMenuUpdated || item_list[i]->pItem->isUpdated()) {
+					//LCD19264.Print(i, LIST_X_OFFSET, "            ");
 					item_print (&LCD19264, i, LIST_X_OFFSET, item_list[i]->pItem);
 				}
 				// checking if the cursor need refreshing
@@ -293,11 +293,16 @@ void task_LCD (void const * arg)
 				
 		/* LED Display */
 		if (Voltage_Source.getValue(MP_TRIGGER))
+			LED_Set(GPIO_LED_YL, LED_ON);
+		else
+			LED_Set(GPIO_LED_YL, LED_OFF);
+		
+		if (GPIO_ReadInputDataBit(GPIO_TFB))
 			LED_Set(GPIO_LED_RD, LED_ON);
 		else
 			LED_Set(GPIO_LED_RD, LED_OFF);
 		
 		LED_Set(GPIO_LED_GR, LED_OFF);
-		osDelay(60);
+		osDelay(100);
 	}
 }

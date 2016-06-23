@@ -20,6 +20,9 @@ Marx Current_Source(CURRENT_SOURCE, 1, curr_pval, curr_pmin, curr_pmax, curr_pun
 //						  t		f		u	i
 int16_t console_pval[] = {0, 	1, 		1,	0};
 int16_t console_pmin[] = {0, 	1, 		0,	0};
-int16_t console_pmax[] = {999, 	100, 	1,	9999};
-float console_punit[] =  {1,	0.1,	1,	1};
+int16_t console_pmax[] = {999, 	200, 	1,	9999};
+float console_punit[] =  {1,	0.01,	1,	1};
 Console Main_Console(console_pval, console_pmin, console_pmax, console_punit);
+
+Param16 dead_zone1(50, 20, 100, 10);
+Param16 dead_zone2(50, 20, 100, 10);

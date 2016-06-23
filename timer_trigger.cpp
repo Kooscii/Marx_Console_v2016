@@ -59,9 +59,9 @@ void timer_Trigger(void const *arg) {
 //		}
 //		else {
 //			if (Main_Console.Times_Cnt==0) {
-//				Main_Console.setRepetition(false);
-//				Main_Console.setTrigger(false);
-//				osTimerStop(id_tmr_trigger);
+				Main_Console.setRepetition(false);
+				Main_Console.setTrigger(false);
+				osTimerStop(id_tmr_trigger);
 //			}
 //			else {
 //				LED_Set(GPIO_LED_YL, LED_ON);

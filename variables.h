@@ -10,5 +10,9 @@ extern Marx Current_Source;
 extern Console Main_Console;
 extern Menu Main_Menu;
 
+extern Param16 dead_zone1;
+extern Param16 dead_zone2;
+
+
 
 #endif /* VARIABLES_H_ */
