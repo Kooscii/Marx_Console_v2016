@@ -24,6 +24,6 @@ void Peripheral_Configure(void);
 void LED_Set(GPIO_TypeDef* _GPx, uint16_t _Pin, bool _led);
 
 extern uint8_t I2C1_Buffer_Tx[5];
-extern uint8_t SPI1_Buffer_Tx[5];
+extern uint8_t SPI1_Buffer_Tx[100];
 
 #endif /* PERIPHERAL_H_ */

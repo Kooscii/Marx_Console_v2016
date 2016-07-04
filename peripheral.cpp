@@ -1,9 +1,10 @@
 #include "peripheral.h"
 
 #define I2C1_DR_Address	0x40005410
+#define SPI1_DR_Address	0x4001300C
 
-uint8_t I2C1_Buffer_Tx[5] = {0};
-uint8_t SPI1_Buffer_Tx[5] = {0};
+uint8_t I2C1_Buffer_Tx[5];
+uint8_t SPI1_Buffer_Tx[100];
 
 void LED_Set(GPIO_TypeDef* _GPx, uint16_t _Pin, bool _led) {
 	if (_led) GPIO_ResetBits(_GPx, _Pin);
@@ -132,11 +133,12 @@ void DMA_Configure(void)
 {
 	DMA_InitTypeDef  DMA_InitStructure;
 	
+	/* DMA CH6 for I2C1 */
 	DMA_DeInit(DMA1_Channel6);
 	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)I2C1_DR_Address;
 	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)I2C1_Buffer_Tx;
 	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
-	DMA_InitStructure.DMA_BufferSize = 3+1;
+	DMA_InitStructure.DMA_BufferSize = 3;
 	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
 	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
 	DMA_InitStructure.DMA_PeripheralDataSize = DMA_MemoryDataSize_Byte;
@@ -145,8 +147,23 @@ void DMA_Configure(void)
 	DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;
 	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
 	DMA_Init(DMA1_Channel6, &DMA_InitStructure);
+	DMA_ITConfig(DMA1_Channel6, DMA_IT_TC, ENABLE); // Enable IT
 	
-	DMA_ITConfig(DMA1_Channel6, DMA_IT_TC, ENABLE);
+	/* DMA CH3 for SPI1 */
+	DMA_DeInit(DMA1_Channel6);
+	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)SPI1_DR_Address;
+	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)SPI1_Buffer_Tx;
+	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralDST;
+	DMA_InitStructure.DMA_BufferSize = 3;
+	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+	DMA_InitStructure.DMA_PeripheralDataSize = DMA_MemoryDataSize_Byte;
+	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+	DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;
+	DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;
+	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+	DMA_Init(DMA1_Channel3, &DMA_InitStructure);
+	DMA_ITConfig(DMA1_Channel3, DMA_IT_TC, ENABLE);	// Enable IT
 }
 
 void USART_Configure(void)
@@ -203,7 +220,7 @@ void SPI_Configure(void)
 	SPI_InitStructure.SPI_CPOL              = SPI_CPOL_Low;
 	SPI_InitStructure.SPI_CPHA              = SPI_CPHA_1Edge;
 	SPI_InitStructure.SPI_NSS               = SPI_NSS_Soft;
-	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_128;
+	SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_256;
 	SPI_InitStructure.SPI_FirstBit          = SPI_FirstBit_MSB;
 	SPI_InitStructure.SPI_CRCPolynomial     = 7;
 	SPI_Init ( SPI1, &SPI_InitStructure );
@@ -245,14 +262,14 @@ void TIM_Configure(void)
 
 	TIM_ICInitStructure.TIM_Channel     = TIM_Channel_1;
 	TIM_ICInitStructure.TIM_ICPolarity  = TIM_ICPolarity_Falling;
-	TIM_ICInitStructure.TIM_ICFilter    = 0xf;
+	TIM_ICInitStructure.TIM_ICFilter    = 0;
 	TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
 	TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
 	TIM_ICInit ( TIM2, &TIM_ICInitStructure );
 
 	TIM_ICInitStructure.TIM_Channel     = TIM_Channel_2;
 	TIM_ICInitStructure.TIM_ICPolarity  = TIM_ICPolarity_Falling;
-	TIM_ICInitStructure.TIM_ICFilter    = 0xf;
+	TIM_ICInitStructure.TIM_ICFilter    = 0;
 	TIM_ICInitStructure.TIM_ICPrescaler = TIM_ICPSC_DIV1;
 	TIM_ICInitStructure.TIM_ICSelection = TIM_ICSelection_DirectTI;
 	TIM_ICInit ( TIM2, &TIM_ICInitStructure ) ;
@@ -311,6 +328,12 @@ void NVIC_Configure(void)
 	
 	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel6_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+	
+	NVIC_PriorityGroupConfig ( NVIC_PriorityGroup_0 );
+	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel3_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }

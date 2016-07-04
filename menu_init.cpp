@@ -26,9 +26,9 @@ void Menu_Init() {
 		Main_Menu.Menu_Insert(11, new Item(ITEM_TOGGLE, Main_Console.pParameter[CP_TIMES], "次数%8s", (char**)tag_times), 10);
 		Main_Menu.Menu_Insert(12, new Item(ITEM_PARAM16, Main_Console.pParameter[CP_FREQ], "频率%8.2f"), 10);
 		Main_Menu.Menu_Insert(13, new Item(ITEM_TOGGLE, Main_Console.pParameter[CP_FREQ_UNIT], "单位%8s", (char**)tag_freq_unit), 10);
-//		Main_Menu.Menu_Insert(14, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEVOLTAGE], "电压%6.1fkV"), 10);
-		Main_Menu.Menu_Insert(15, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEWIDTH],   "脉宽%6.1fus"), 10);
-//		Main_Menu.Menu_Insert(16, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEDELAY],   "延时%6.1fus"), 10);
+		Main_Menu.Menu_Insert(14, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEWIDTH],   "脉宽%6.1fus"), 10);
+		Main_Menu.Menu_Insert(15, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEVOLTAGE], "电压%6.1fkV"), 10);
+		Main_Menu.Menu_Insert(16, new Item(ITEM_PARAM16, Voltage_Source.Entirety[MP_PULSEDELAY],   "延时%6.1fus"), 10);
 	
 	
 	Item * pitem_currsrc = new Item(ITEM_FOLDER, "调试参数");
