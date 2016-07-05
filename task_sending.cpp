@@ -147,7 +147,7 @@ void task_Sending (void const * arg)
 		width[5] = chop_dura;									// Chop Width
 		
 		/* Pulse Delay */
-		delay[0] = 0;
+		delay[0] = Voltage_Source.getValue(MP_PULSEWIDTH)*5;
 		dead_zone[4] = dead_zone1._get_val()/2;
 		dead_zone[5] = dead_zone2._get_val()/2;
 		for (i=1; i<6; i++)

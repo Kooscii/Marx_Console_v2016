@@ -19,7 +19,7 @@ class Menu;
 #define ITEM_PARAM8		1
 #define ITEM_PARAM16	2
 #define ITEM_TOGGLE		3
-#define ITEM_FUNC		4
+#define ITEM_FUNC			4
 #define ITEM_FOLDER		5
 #define ITEM_LABEL		6
 #define ITEM_TIMES		7	// special for parameter CP_TIMES

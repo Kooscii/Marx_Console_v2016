@@ -4,10 +4,10 @@ InitHeapZone HeapZone;
 
 Menu Main_Menu;
 
-//					   v		w		d		t  	24	cc	p	
-int16_t volt_pval[] = {0, 		50, 	30, 	0, 	0, 	0, 	0};
+//									   v			w			d			t  	24	cc	p	
+int16_t volt_pval[] = {0, 		50, 	0, 		0, 	0, 	0, 	0};
 int16_t volt_pmin[] = {0, 		1, 		0, 		0, 	0, 	0, 	0};
-int16_t volt_pmax[] = {350, 	100, 	9999, 	1, 	1, 	1, 	1};
+int16_t volt_pmax[] = {350, 	100, 	9999, 1, 	1, 	1, 	1};
 float volt_punit[] =  {0.1,		0.1,	0.1,	1, 	1, 	1, 	1};
 Marx Voltage_Source(VOLTAGE_SOURCE, 1, volt_pval, volt_pmin, volt_pmax, volt_punit);
 
