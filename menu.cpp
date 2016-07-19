@@ -83,7 +83,7 @@ bool Menu::onButton(uint8_t button) {
 				cursor->pItem->isItemUpdated = true;
 				/* special for freq max value */
 				if (Main_Console.getValue(CP_FREQ_UNIT)) {	// if unit is khz, maxium freq is 2.00 khz
-					Main_Console.pParameter[CP_FREQ]->_set_max(200);
+					Main_Console.pParameter[CP_FREQ]->_set_max(500);
 				}
 				else {	// if unit is hz, maxium freq is 99.99 hz
 					Main_Console.pParameter[CP_FREQ]->_set_max(9999);
