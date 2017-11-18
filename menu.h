@@ -10,6 +10,8 @@
 #define BTN_RIGHT	3
 #define BTN_CANCEL	4
 #define BTN_OK		5
+#define BTN_RIGHT_DEBUG		6
+#define BTN_LEFT_DEBUG		7
 
 class Menu_Node;
 class Menu;

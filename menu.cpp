@@ -1,5 +1,5 @@
 #include "menu.h"
-
+#include "variables.h"
 
 bool Menu::onButton(uint8_t button) {
 	switch (button) {
@@ -10,18 +10,46 @@ bool Menu::onButton(uint8_t button) {
 			nextCursor();
 			break;
 		case BTN_LEFT:
-			if (page->Tp->getID()==-1 && page->Tprev && page->Tprev->getID()<1000) {
+			if (isCursorSelected) {
+				cursor->pItem->setValue(-100, 1);
+			}
+			else {
+				if (page->Tp->getID()==-1 && page->Tprev && page->Tprev->getID()<1000) {
+					prevPage();
+					if (cursor->isToggle() || true) {
+						isCursorSelected = false;
+						isCursorChanged = true;
+					}
+				}
+			}
+			break;
+		case BTN_LEFT_DEBUG:
+			if (page->Tp->getID()==-1 && page->Tprev) {
 				prevPage();
-				if (cursor->isToggle()) {
+				if (cursor->isToggle() || true) {
 					isCursorSelected = false;
 					isCursorChanged = true;
 				}
 			}
 			break;
 		case BTN_RIGHT:
-			if (page->Tp->getID()==-1 && page->Tnext && page->Tnext->getID()<1000) {
+			if (isCursorSelected) {
+				cursor->pItem->setValue(100, 1);
+			}
+			else {
+				if (page->Tp->getID()==-1 && page->Tnext && page->Tnext->getID()<1000) {
+					nextPage();
+					if (cursor->isToggle() || true) {
+						isCursorSelected = false;
+						isCursorChanged = true;
+					}
+				}
+			}
+			break;
+		case BTN_RIGHT_DEBUG:
+			if (page->Tp->getID()==-1 && page->Tnext) {
 				nextPage();
-				if (cursor->isToggle()) {
+				if (cursor->isToggle() || true) {
 					isCursorSelected = false;
 					isCursorChanged = true;
 				}
@@ -34,7 +62,7 @@ bool Menu::onButton(uint8_t button) {
 				isCursorChanged = true;
 			}
 			// if cursor isn't selected, back to parent menu. if parent is root, do nothing
-			else if (cursor->Tp!=root){
+			else if (cursor->Tp->Tp!=root){
 				setCursor(cursor->Tp);
 				setPage(page->Tp);
 			}
@@ -53,6 +81,13 @@ bool Menu::onButton(uint8_t button) {
 			else if (cursor->isToggle()) {
 				cursor->pItem->Exec();
 				cursor->pItem->isItemUpdated = true;
+				/* special for freq max value */
+				if (Main_Console.getValue(CP_FREQ_UNIT)) {	// if unit is khz, maxium freq is 2.00 khz
+					Main_Console.pParameter[CP_FREQ]->_set_max(200);
+				}
+				else {	// if unit is hz, maxium freq is 99.99 hz
+					Main_Console.pParameter[CP_FREQ]->_set_max(9999);
+				}
 			}
 			// otherwise, select it
 			else if (cursor->isParam()){

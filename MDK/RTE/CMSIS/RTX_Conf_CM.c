@@ -55,28 +55,28 @@
 //   <i> Defines default stack size for threads with osThreadDef stacksz = 0
 //   <i> Default: 200
 #ifndef OS_STKSIZE
- #define OS_STKSIZE     50
+ #define OS_STKSIZE     74
 #endif
 
 //   <o>Main Thread stack size [bytes] <64-32768:8><#/4>
 //   <i> Defines stack size for main thread.
 //   <i> Default: 200
 #ifndef OS_MAINSTKSIZE
- #define OS_MAINSTKSIZE 50
+ #define OS_MAINSTKSIZE 74
 #endif
 
 //   <o>Number of threads with user-provided stack size <0-250>
 //   <i> Defines the number of threads with user-provided stack size.
 //   <i> Default: 0
 #ifndef OS_PRIVCNT
- #define OS_PRIVCNT     3
+ #define OS_PRIVCNT     2
 #endif
 
 //   <o>Total stack size [bytes] for threads with user-provided stack size <0-1048576:8><#/4>
 //   <i> Defines the combined stack size for threads with user-provided stack size.
 //   <i> Default: 0
 #ifndef OS_PRIVSTKSIZE
- #define OS_PRIVSTKSIZE 1000
+ #define OS_PRIVSTKSIZE 500
 #endif
 
 // <q>Check for stack overflow
@@ -115,7 +115,7 @@
 //   <i> Defines the timer tick value.
 //   <i> Default: 1000  (1ms)
 #ifndef OS_TICK
- #define OS_TICK        1000
+ #define OS_TICK        100
 #endif
 
 // </h>
@@ -135,7 +135,7 @@
 //   <i> Defines how long a thread will execute before a thread switch.
 //   <i> Default: 5
 #ifndef OS_ROBINTOUT
- #define OS_ROBINTOUT   5
+ #define OS_ROBINTOUT   50
 #endif
 
 // </e>
